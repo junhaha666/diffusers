@@ -23,6 +23,7 @@ from ..image_processor import IPAdapterMaskProcessor
 from ..utils import deprecate, is_torch_xla_available, logging
 from ..utils.import_utils import is_torch_npu_available, is_torch_xla_version, is_xformers_available
 from ..utils.torch_utils import is_torch_version, maybe_allow_in_graph
+from .triton_flash_attention_fp8_block_f8bwd import triton_attention_block
 
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
@@ -1479,7 +1480,8 @@ class JointAttnProcessor2_0:
             key = torch.cat([key, encoder_hidden_states_key_proj], dim=2)
             value = torch.cat([value, encoder_hidden_states_value_proj], dim=2)
 
-        hidden_states = F.scaled_dot_product_attention(query, key, value, dropout_p=0.0, is_causal=False)
+        # hidden_states = F.scaled_dot_product_attention(query, key, value, dropout_p=0.0, is_causal=False)
+        hidden_states = triton_attention_block(query, key, value, dropout_p=0.0, causal=False)
         hidden_states = hidden_states.transpose(1, 2).reshape(batch_size, -1, attn.heads * head_dim)
         hidden_states = hidden_states.to(query.dtype)
 
