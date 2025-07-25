@@ -1481,7 +1481,28 @@ class JointAttnProcessor2_0:
             value = torch.cat([value, encoder_hidden_states_value_proj], dim=2)
 
         # hidden_states = F.scaled_dot_product_attention(query, key, value, dropout_p=0.0, is_causal=False)
-        hidden_states = triton_attention_block(query, key, value, dropout_p=0.0, causal=False)
+        
+        hidden_states, _, _ = triton_attention_block(
+            query, 
+            key, 
+            value, 
+            o=None, 
+            alibi_slopes=None, 
+            bias=None, 
+            sm_scale=1.0, 
+            dropout_p=0.0, 
+            cu_seqlens_q=query.shape[1], 
+            cu_seqlens_k=key.shape[1], 
+            max_seqlens_q=query.shape[1],
+            max_seqlens_k=key.shape[1],
+            causal=False,
+            return_scores=False,
+            use_exp2=False,
+            layout="bshd",
+            fp8_scales=[None, None, None],
+            q_hp=None,
+            k_hp=None,
+            v_hp=None)
         hidden_states = hidden_states.transpose(1, 2).reshape(batch_size, -1, attn.heads * head_dim)
         hidden_states = hidden_states.to(query.dtype)
 

@@ -1,6 +1,6 @@
 	export HIP_VISIBLE_DEVICES=6
-	export MODEL_NAME=/mnt/raid0/jun/mydocker/model/stable-diffusion-3.5-medium 
-	export OUTPUT_DIR=/mnt/raid0/jun/mydocker/model/stable-diffusion-3.5-medium-finetune_jun
+	export MODEL_NAME=/data/jun/stable-diffusion-3.5-medium 
+	export OUTPUT_DIR=/data/jun/stable-diffusion-3.5-medium-finetune_jun
 	export DATASET_NAME=fusing/fill50k
     export DATASET_DIR=/mnt/raid0/jun/mydocker/model/dataset/fusing_fill50k_process/train
 	
@@ -16,5 +16,5 @@
 	  --validation_steps=100 \
 	  --train_batch_size=4 \
 	  --dataloader_num_workers 8 \
-	  --dataset_preprocess_batch_size 10000 \
+	  --dataset_preprocess_batch_size 1000 \
 	  --gradient_accumulation_steps=4

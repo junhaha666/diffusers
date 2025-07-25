@@ -1297,7 +1297,7 @@ def _bwd_kernel_one_col_block(
 
     # loop over rows
     for start_m in range(lo, num_block_m * BLOCK_M, BLOCK_M):
-        can_skip_causal_block = start_m < causal_boundary
+        can_skip_causal_block = start_m < causal_boundary if CAUSAL else False
         offs_m = start_m + tl.arange(0, BLOCK_M)
 
         if USE_FP8:
