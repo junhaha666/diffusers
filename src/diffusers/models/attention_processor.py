@@ -23,7 +23,7 @@ from ..image_processor import IPAdapterMaskProcessor
 from ..utils import deprecate, is_torch_xla_available, logging
 from ..utils.import_utils import is_torch_npu_available, is_torch_xla_version, is_xformers_available
 from ..utils.torch_utils import is_torch_version, maybe_allow_in_graph
-from .triton_flash_attention_fp8_block_f8bwd import triton_attention_block
+from .triton_flash_attention_fp8_block import triton_attention_block
 
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
